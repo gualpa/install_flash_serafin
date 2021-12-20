@@ -84,31 +84,6 @@ class UpdateConfigFile:
         out_file.write(data)
         out_file.close()
 
-    def update_file2(self, str_in_file, str_out_file, list_values):
-        """ C 
-        Args:
-             str_in_file (string)= 
-
-        Returns []:
-        
-        """
-        print(str(list_values))
-        in_file = open(str_in_file, 'rt')
-        out_file = open(str_out_file, 'wt')
-
-        print("-----in ---"+str_in_file)
-        print("-----out ---"+str_out_file)
-
-        print("-----ARCHIVO  ---"+str(in_file))
-        count = 0
-        for line in in_file:
-            count = count +1
-            #print("Linea "+str(count)+'  '+str(line))
-            for item in list_values:
-                #print("   item "+ str(item))
-                out_file.write(line.replace(item[K_OLD],item[K_NEW]))
-        in_file.close()
-        out_file.close()
 
     def update(self, path_in, path_out):
         """ C 
