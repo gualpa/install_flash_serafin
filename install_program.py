@@ -37,46 +37,49 @@ from interface import implements, Interface
 from iate_file import find_argument
 
 SEPARATOR_ARG = '='
+INSTALL_FLASH = 'PATH_FLASH'
 INSTALL_PATH = 'PATH'
 MAKEFILE_PATH = 'PATH_MAKE'
 DEFAULT_PATH = './'
 K_OLD = 'old'
 K_NEW = 'new'
+K_NOMBRE_SERVIDOR = 'serafin'
+K_DEFAULT_SETUP_FLASH = './setup Sedov -auto'
+K_DEFAULT_FLASH = 'SETUP_FLASH'
 
 class LibraryInstall(Interface):
-    """ Interface   """
+    """ Se encarga en la instalacion de la libreria """
     def install(self):
-        """ C 
-        Args:
-             
-
-        Returns []:
+        """ Instalacion de la libreria
+        Args: nulll
+        
+        Returns : null
              
         """
         pass
 
 class UpdateConfigFile:
-    """ The interface for communication with the file manager """
+    """ Clase para la configuracion de los archivos"""
     def __init__(self, path_install_aux):
         """
-        ARG:
- 
+        ARG: path_install_aux = path de instalacion
 
         """
         self.path_install = path_install_aux
     """    """
     def update_file(self, str_in_file, str_out_file, list_values):
-        """ C 
+        """ Actualiza un archivo utilizando una lista de valores
         Args:
-             str_in_file (string)= 
+             str_in_file (string): path del archivo que va a modificarse
+             str_out_file (string): path del archivo donde se va a guardar
+             list_values [{K_OLD: ,K_NEW: },{},...] = array de diccionario de 
+                 texto que se va a cambiar.
+        Returns: null
 
-        Returns []:
-        
         """
         in_file = open(str_in_file, 'rt')
         data = in_file.read()
         for item in list_values:
-            #print("   item "+ str(item))
             data = data.replace(item[K_OLD],item[K_NEW] + '\n #', 1)
         in_file.close()
 
@@ -86,12 +89,13 @@ class UpdateConfigFile:
 
 
     def update(self, path_in, path_out):
-        """ C 
+        """ Actualiza los archivos de configuracion necesarios
         Args:
-             str_in_file (string)= 
+            path_in (string): path del archivo que va a modificarse
+            path_out (string): path del archivo donde se va a guardar
 
-        Returns []:
-        
+        Returns null:
+
         """
         pass
 
@@ -125,12 +129,13 @@ class ZlibForFlash(UpdateConfigFile, implements(LibraryInstall)):
         os.system(str_command3)
 
     def update(self, path_in, path_out):
-        """ C 
+        """ Actualiza los archivos de configuracion necesarios
         Args:
-             
+            path_in (string): path del archivo que va a modificarse
+            path_out (string): path del archivo donde se va a guardar
 
-        Returns []:
-             
+        Returns null:
+
         """
         old_path = 'ZLIB_PATH'
         new_path = old_path + ' = '+self.path_install + '/zlib'
@@ -145,7 +150,7 @@ class HypreForFlash(UpdateConfigFile, implements(LibraryInstall)):
              
 
         Returns []:
-             
+
         """
         str_requeriments = 'module load gcc;module load openmpi;module load hdf5;'
         path_hypre = self.path_install + '/hypre'
@@ -158,12 +163,13 @@ class HypreForFlash(UpdateConfigFile, implements(LibraryInstall)):
         os.system(str_requeriments + "make install")
 
     def update(self, path_in, path_out):
-        """ C 
+        """ Actualiza los archivos de configuracion necesarios
         Args:
-             
+            path_in (string): path del archivo que va a modificarse
+            path_out (string): path del archivo donde se va a guardar
 
-        Returns []:
-             
+        Returns null:
+
         """
         old_path = 'HYPRE_PATH'
         new_path = old_path + ' = ' + self.path_install + '/src/hypre/'
@@ -176,7 +182,6 @@ class OpenmpiForFlash(UpdateConfigFile, implements(LibraryInstall)):
     def install(self):
         """ C 
         Args:
-             
 
         Returns []:
              
@@ -185,12 +190,13 @@ class OpenmpiForFlash(UpdateConfigFile, implements(LibraryInstall)):
 
 
     def update(self, path_in, path_out):
-        """ C 
+        """ Actualiza los archivos de configuracion necesarios
         Args:
-             
+            path_in (string): path del archivo que va a modificarse
+            path_out (string): path del archivo donde se va a guardar
 
-        Returns []:
-             
+        Returns null:
+
         """
         old_path = 'MPI_PATH'
         new_path = old_path + ' = ' + '/opt/ccad/21.11/software/linux-rocky8-zen2/gcc-11.2.0/'\
@@ -202,22 +208,21 @@ class OpenmpiForFlash(UpdateConfigFile, implements(LibraryInstall)):
 class Hdf5ForFlash(UpdateConfigFile, implements(LibraryInstall)):
     """ class   """
     def install(self):
-        """ C 
+        """ C
         Args:
-             
 
         Returns []:
-             
         """
         pass
 
     def update(self, path_in, path_out):
-        """ C 
+        """ Actualiza los archivos de configuracion necesarios
         Args:
-             
+            path_in (string): path del archivo que va a modificarse
+            path_out (string): path del archivo donde se va a guardar
 
-        Returns []:
-             
+        Returns null:
+
         """
         old_path = 'HDF5_PATH'
         new_path =  old_path + ' = ' + '/opt/ccad/21.11/software/linux-rocky8-zen2/gcc-11.2.0/'\
@@ -228,37 +233,51 @@ class Hdf5ForFlash(UpdateConfigFile, implements(LibraryInstall)):
 
 
 # Paso de argumentos
-#  python install_program.py PATH=/home/srgualpa/pruebas PATH_MAKE=/home/srgualpa/projects/flash/instalacion_script_python/make_original
+#  python install_program.py PATH=/home/srgualpa/pruebas PATH_MAKE=/home/srgualpa/projects/flash/instalacion_script_python/make_original PATH_FLASH=/home/srgualpa/pruebas/FLASH4.6.2  SETUP_FLASH='./setup Sedov -auto'
 #   
 if __name__ == '__main__':
     #
 
     path_inst = ''
     path_make = ''
+    path_make = ''
+    command_setup_flash = ''
     print('*** *** Instalacion de Flash en el servidor Serafin *** ***')
     if(len(sys.argv) < 3):
         print('Se debe pasar como argumento el directorio de instalacion')
         print('y el directorio con el Makefile')
         assert False
     else:
-        path_inst = find_argument(sys.argv, INSTALL_PATH, SEPARATOR_ARG,DEFAULT_PATH)
-        path_make = find_argument(sys.argv, MAKEFILE_PATH, SEPARATOR_ARG,DEFAULT_PATH)
+        path_inst = find_argument(sys.argv, INSTALL_PATH, SEPARATOR_ARG, DEFAULT_PATH)
+        path_make = find_argument(sys.argv, MAKEFILE_PATH, SEPARATOR_ARG, DEFAULT_PATH)
+        path_flash = find_argument(sys.argv, INSTALL_FLASH, SEPARATOR_ARG, DEFAULT_PATH)
+        command_setup_flash = find_argument(sys.argv, K_DEFAULT_FLASH, \
+                                            SEPARATOR_ARG, K_DEFAULT_SETUP_FLASH)
+
+
+
         print('Lugar de instalacion:  de las librerias', path_inst)
         print('Lugar de makefile ', path_make) 
+        print('Lugar de flash ', path_flash) 
 
-    print('Path instalacion ' +path_inst)
-    print('Path Make ' +path_make)
+
+
+
+
+    os.chdir(path_flash)
+    os.chdir('sites')
+    os.makedirs(K_NOMBRE_SERVIDOR, mode=511, exist_ok=True)
 
 
     openmpi = OpenmpiForFlash(path_inst)
     hdf5 = Hdf5ForFlash(path_inst)
     zlib = ZlibForFlash(path_inst)
     hypre = HypreForFlash(path_inst)
-
+    
     library_list =[openmpi, hdf5, zlib, hypre]
 
     flag_first_loop = True
-    out_path_inst_make_aux = path_inst + '/Makefile.h'
+    out_path_inst_make_aux = path_flash + '/sites/' + K_NOMBRE_SERVIDOR + '/Makefile.h'
     for library in library_list:
         library.install()
         if(flag_first_loop):
@@ -267,6 +286,10 @@ if __name__ == '__main__':
         else:
             in_path_make_aux = out_path_inst_make_aux
         library.update(in_path_make_aux, out_path_inst_make_aux)
-
-
-
+    
+    os.chdir(path_flash)
+    print("-------------")
+    print(os.system('pwd'))
+    os.system(command_setup_flash)
+    os.chdir(path_flash + '/object')
+    os.system('make -j 16')
