@@ -1,18 +1,19 @@
-# Requirements python
-pip install -r requirements.txt -v
-
-
-
-el programa se ejecuta 
-
-
-cp -r  /home/srgualpa/instaladores/FLASH4.6.2/ /home/srgualpa/pruebas/
-cd FLASH4.6.2/
-cd sites
-mkdir serafin
-cp ../../Makefile.h serafin/
+ Instalacion
  
-./setup Sedov -auto
-cd object/
-make -j 16
-python install_program.py PATH=/home/srgualpa/pruebas PATH_MAKE=/home/srgualpa/projects/flash/instalacion_script_python/make_original
+#requerimientos : tener instalado conda o mini conda
+
+Pasos:
+1) Ir a la carpeta de instalacion
+1) git clone https://gitlab.com/srgualpa_iate/install_program.git
+2) cd install_program
+3) cp -r path_de_la_carpeta_raiz_flash flash/
+   El path debe incluir el nombre de la carpeta raiz de flash
+   osea si ejecutamos 
+   ls path_de_la_carpeta_raiz_flash
+   nos debe dar 
+   LICENSE  RELEASE  RELEASE-NOTES  bin  docs  lib  object  setup  setup_alt  sites  source  tools 
+4) conda create --name flash_instacion python=3.7
+5) conda activate flash_instacion
+# Requirements python
+6) pip install -r requirements.txt -v
+7) python install_program.py
