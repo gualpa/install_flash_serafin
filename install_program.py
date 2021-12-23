@@ -243,22 +243,17 @@ if __name__ == '__main__':
     path_make = ''
     command_setup_flash = ''
     print('*** *** Instalacion de Flash en el servidor Serafin *** ***')
-    if(len(sys.argv) < 3):
-        print('Se debe pasar como argumento el directorio de instalacion')
-        print('y el directorio con el Makefile')
-        assert False
-    else:
-        path_inst = find_argument(sys.argv, INSTALL_PATH, SEPARATOR_ARG, DEFAULT_PATH)
-        path_make = find_argument(sys.argv, MAKEFILE_PATH, SEPARATOR_ARG, DEFAULT_PATH)
-        path_flash = find_argument(sys.argv, INSTALL_FLASH, SEPARATOR_ARG, DEFAULT_PATH)
-        command_setup_flash = find_argument(sys.argv, K_DEFAULT_FLASH, \
-                                            SEPARATOR_ARG, K_DEFAULT_SETUP_FLASH)
 
+    path_act = str(os.getcwd())
+    path_inst = find_argument(sys.argv, INSTALL_PATH, SEPARATOR_ARG, path_act)
+    path_make = find_argument(sys.argv, MAKEFILE_PATH, SEPARATOR_ARG, path_act)
+    path_flash = find_argument(sys.argv, INSTALL_FLASH, SEPARATOR_ARG, path_act + 'flash')
+    command_setup_flash = find_argument(sys.argv, K_DEFAULT_FLASH, \
+                                        SEPARATOR_ARG, K_DEFAULT_SETUP_FLASH)
 
-
-        print('Lugar de instalacion:  de las librerias', path_inst)
-        print('Lugar de makefile ', path_make) 
-        print('Lugar de flash ', path_flash) 
+    print('Lugar de instalacion:  de las librerias', path_inst)
+    print('Lugar de makefile ', path_make) 
+    print('Lugar de flash ', path_flash) 
 
 
 
@@ -288,8 +283,6 @@ if __name__ == '__main__':
         library.update(in_path_make_aux, out_path_inst_make_aux)
     
     os.chdir(path_flash)
-    print("-------------")
-    print(os.system('pwd'))
     os.system(command_setup_flash)
     os.chdir(path_flash + '/object')
     os.system('make -j 16')
