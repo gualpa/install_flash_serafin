@@ -247,7 +247,7 @@ if __name__ == '__main__':
     path_act = str(os.getcwd())
     path_inst = find_argument(sys.argv, INSTALL_PATH, SEPARATOR_ARG, path_act)
     path_make = find_argument(sys.argv, MAKEFILE_PATH, SEPARATOR_ARG, path_act)
-    path_flash = find_argument(sys.argv, INSTALL_FLASH, SEPARATOR_ARG, path_act + 'flash')
+    path_flash = find_argument(sys.argv, INSTALL_FLASH, SEPARATOR_ARG, path_act + '/flash')
     command_setup_flash = find_argument(sys.argv, K_DEFAULT_FLASH, \
                                         SEPARATOR_ARG, K_DEFAULT_SETUP_FLASH)
 
